@@ -10,24 +10,16 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")
 from shared.student import GROUP_NAME, STUDENT_NAME, VARIANT_NUMBER
 
 passwords = [
-    "ThreatH@nt3r",
-    "weak123",
-    "P3n3trat10n@Test",
-    "visitor",
-    "Cyber@Defense2023",
-    "normal",
-    "Incident@R3sp0nse",
-    "standard",
-    "Risk@Analys1s",
-    "typical",
+    "ThreatH@nt3r", "weak123", "P3n3trat10n@Test", "visitor",
+    "Cyber@Defense2023", "normal", "Incident@R3sp0nse", "standard", 
+    "Risk@Analys1s", "typical"
 ]
 
 criteria = {
     "min_length": 10,
-    "require_digits": True,
-    "require_upper": True,
-    "require_special": True,
-    "require_lower": True,
+    "require_digits": True, 
+    "require_upper": True, 
+    "require_special": True
 }
 
 forbidden_passwords = {"weak123", "visitor", "normal", "standard", "typical", "admin"}

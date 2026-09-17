@@ -1,18 +1,17 @@
-import os
-import sys
 import csv
 import hashlib
 import json
-from datetime import datetime
-from pathlib import Path
+import os
+import sys
+from datetime import datetime, timezone
 from functools import wraps
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-from shared.student import GROUP_NAME, STUDENT_NAME, VARIANT_NUMBER
+from pathlib import Path
 
 from rich.console import Console
 from rich.table import Table
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+from shared.student import VARIANT_NUMBER
 
 hash_algorithm = "sha256"
 min_length = 11
@@ -71,12 +70,7 @@ def create_users(users_list: tuple) -> None:
     try:
         data.mkdir(parents=True, exist_ok=True)
 
-        with open(
-            users_file,
-            "w",
-            newline="",
-            encoding="utf-8"
-        ) as file:
+        with open(users_file, "w", newline="", encoding="utf-8") as file:
 
             writer = csv.writer(file)
 
@@ -97,7 +91,7 @@ def create_users(users_list: tuple) -> None:
     except PermissionError:
         print("Помилка: немає дозволу на роботу з файлом.")
 
-    except IOError as error:
+    except OSError as error:
         print(f"Помилка введення/виведення: {error}")
 
 
@@ -105,13 +99,7 @@ def read_users() -> list[tuple[str, str]]:
     try:
         users = []
 
-        with open(
-            users_file,
-            "r",
-            newline="",
-            encoding="utf-8"
-        ) as file:
-
+        with open(users_file, "r" , newline="", encoding="utf-8") as file:
             reader = csv.reader(file)
 
             for row in reader:
@@ -126,7 +114,7 @@ def read_users() -> list[tuple[str, str]]:
     except PermissionError:
         print("Помилка: немає дозволу на читання файлу.")
 
-    except IOError as error:
+    except OSError as error:
         print(f"Помилка введення/виведення: {error}")
 
     return []
@@ -169,9 +157,7 @@ def log_event(function):
                 "event": "login",
                 "user": username,
                 "result": result,
-                "timestamp": datetime.now().strftime(
-                    "%Y-%m-%d %H:%M:%S"
-                ),
+                "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
                 "args": [],
                 "kwargs": {}
             }
@@ -180,28 +166,15 @@ def log_event(function):
                 data.mkdir(parents=True, exist_ok=True)
 
                 if log_file.exists():
-                    with open(
-                        log_file,
-                        "r",
-                        encoding="utf-8"
-                    ) as file:
+                    with open(log_file, "r", encoding="utf-8") as file:
                         logs = json.load(file)
                 else:
                     logs = []
 
                 logs.append(event)
 
-                with open(
-                    log_file,
-                    "w",
-                    encoding="utf-8"
-                ) as file:
-                    json.dump(
-                        logs,
-                        file,
-                        indent=4,
-                        ensure_ascii=False
-                    )
+                with open(log_file, "w", encoding="utf-8") as file:
+                    json.dump(logs, file, indent=4, ensure_ascii=False)
 
             except FileNotFoundError:
                 print("Помилка: файл log.json не знайдено.")
@@ -209,7 +182,7 @@ def log_event(function):
             except PermissionError:
                 print("Помилка: немає дозволу на запис журналу.")
 
-            except IOError as error:
+            except OSError as error:
                 print(f"Помилка журналювання: {error}")
 
             except ValueError:
@@ -251,7 +224,7 @@ def main() -> None:
     except PermissionError:
         print("Помилка: немає дозволу на роботу з файлом.")
 
-    except IOError as error:
+    except OSError as error:
         print(f"Помилка введення/виведення: {error}")
 
     except ValidationError as error:

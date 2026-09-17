@@ -1,4 +1,3 @@
-
 users = {
     "crypto_specialist": {
         "role": "cryptographer",
@@ -46,14 +45,12 @@ resources = [
     ("public_datasets", 1)
 ]
 
-
 security_levels = (
     "Unclassified",
     "For Official Use",
     "Confidential",
     "Secret"
 )
-
 
 blocked_users = {
     "test_account",
