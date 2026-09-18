@@ -110,7 +110,7 @@ def check_all_access():
                 print(f"user={username}, resource={resource_name} -> DENY ({reason})")
 
 
-def main():
+def run_task2():
     print_resources()
     print()
 
@@ -118,4 +118,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run_task2()

@@ -6,8 +6,6 @@ import sys
 from rich.console import Console
 from rich.table import Table
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-from shared.student import GROUP_NAME, STUDENT_NAME, VARIANT_NUMBER
 
 passwords = [
     "ThreatH@nt3r", "weak123", "P3n3trat10n@Test", "visitor",
@@ -87,9 +85,7 @@ def analyze_passwords(password_list):
 
 
 def print_results(results):
-    print(f"Студентка: {STUDENT_NAME}")
-    print(f"Група: {GROUP_NAME}")
-    print(f"Варіант: {VARIANT_NUMBER}")
+
     table = Table(title="Аналіз надійності паролів")
 
     table.add_column("Пароль")
@@ -101,7 +97,7 @@ def print_results(results):
     console.print(table)
 
 
-def main():
+def run_task1():
 
     password_list = passwords.copy()
     add_duplicates(password_list)
@@ -110,4 +106,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run_task1()

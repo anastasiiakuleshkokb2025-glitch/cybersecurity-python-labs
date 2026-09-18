@@ -210,7 +210,7 @@ def login(username: str, password: str) -> bool:
     return False
 
 
-def main() -> None:
+def run_task3() -> None:
     global users_db
 
     create_users(users_to_register)
@@ -219,4 +219,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    run_task3()
