@@ -1,11 +1,8 @@
-import os
 import random
 import string
-import sys
 
 from rich.console import Console
 from rich.table import Table
-
 
 passwords = [
     "ThreatH@nt3r", "weak123", "P3n3trat10n@Test", "visitor",
