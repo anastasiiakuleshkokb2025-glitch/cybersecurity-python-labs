@@ -213,25 +213,9 @@ def login(username: str, password: str) -> bool:
 def main() -> None:
     global users_db
 
-    try:
-        create_users(users_to_register)
-        users_db = read_users()
-        print_users(users_db)
-
-    except FileNotFoundError:
-        print("Помилка: файл не знайдено.")
-
-    except PermissionError:
-        print("Помилка: немає дозволу на роботу з файлом.")
-
-    except OSError as error:
-        print(f"Помилка введення/виведення: {error}")
-
-    except ValidationError as error:
-        print(f"Помилка перевірки пароля: {error}")
-
-    except ValueError as error:
-        print(f"Помилка значення: {error}")
+    create_users(users_to_register)
+    users_db = read_users()
+    print_users(users_db)
 
 
 if __name__ == "__main__":
