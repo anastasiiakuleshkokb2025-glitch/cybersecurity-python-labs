@@ -58,10 +58,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Лабораторна робота №2")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    # 1. demo (Завдання 1)
     subparsers.add_parser("demo")
 
-    # 2. analyze (Завдання 2, Варіант 8)
     analyze_parser = subparsers.add_parser("analyze")
     analyze_parser.add_argument("--dns-log", required=True)
     analyze_parser.add_argument("--blacklist", required=True)
@@ -81,7 +79,7 @@ def main() -> None:
                 min_domain_len=args.min_domain_len,
             )
         except (FileNotFoundError, PermissionError, OSError) as err:
-            print(f"[ERROR] Помилка роботи з файлами: {err}", file=sys.stderr)
+            print(f"Помилка роботи з файлами: {err}", file=sys.stderr)
             sys.exit(1)
 
 

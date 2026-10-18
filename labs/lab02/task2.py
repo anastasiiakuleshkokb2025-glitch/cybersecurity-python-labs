@@ -1,8 +1,3 @@
-"""labs/lab02/task2.py
-
-Варіант 8: Фільтр та аналізатор журналів DNS-запитів.
-"""
-
 import csv
 import logging
 import math
@@ -13,7 +8,6 @@ from pathlib import Path
 
 logger = logging.getLogger("dns_analyzer")
 
-# Регулярні вирази для евристики виявлення аномальних та DGA доменів
 SUSPICIOUS_TLDS = {".xyz", ".top", ".club", ".buzz", ".work", ".cfd", ".ru", ".tk"}
 SUBDOMAIN_DGA_REGEX = re.compile(
     r"^(?P<subdomain>[a-z0-9]{10,})\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$",
@@ -99,14 +93,13 @@ def analyze_dns_logs(
     min_domain_len: int = 30,
 ) -> None:
     """Головна функція аналізу DNS-запитів."""
-    # 1. Завантаження чорного списку
+
     blacklist = load_blacklist(blacklist_path)
 
     query_counter: Counter[str] = Counter()
     alerts: list[DNSAlert] = []
     total_records = 0
 
-    # 2. Зчитування та обробка лог-файлу
     try:
         with dns_log_path.open("r", encoding="utf-8") as f:
             for line_no, raw_line in enumerate(f, start=1):
@@ -123,7 +116,6 @@ def analyze_dns_logs(
 
                     query_counter[qtype] += 1
 
-                    # Перевірка 1: Чорний список (Blacklist)
                     if domain in blacklist:
                         alerts.append(
                             DNSAlert(
@@ -137,7 +129,6 @@ def analyze_dns_logs(
                         )
                         continue
 
-                    # Перевірка 2: Аномальна довжина (DGA / тунелювання)
                     if len(domain) >= min_domain_len:
                         if qtype == "TXT":
                             reason = f"Abnormally long TXT query domain: {domain} (Length: {len(domain)})"
@@ -156,7 +147,6 @@ def analyze_dns_logs(
                         )
                         continue
 
-                    # Перевірка 3: Випадковий піддомен з високою ентропією
                     match = SUBDOMAIN_DGA_REGEX.match(domain)
                     subdomain = (
                         match.group("subdomain") if match else domain.split(".")[0]
@@ -176,7 +166,6 @@ def analyze_dns_logs(
                         )
                         continue
 
-                    # Перевірка 4: Підозрілі зони TLD
                     if any(domain.endswith(tld) for tld in SUSPICIOUS_TLDS):
                         alerts.append(
                             DNSAlert(
@@ -204,7 +193,6 @@ def analyze_dns_logs(
         logger.error("OS error reading log file %s: %s", dns_log_path, err)
         raise
 
-    # 3. Виведення у консоль точно за прикладом із методички
     print(f"[INFO] Parsing DNS log file {dns_log_path}...")
     print(f"[INFO] Processed {total_records:,} DNS query records.\n")
 
@@ -217,7 +205,6 @@ def analyze_dns_logs(
     for alert in alerts:
         print(f"[{alert.alert_type}] {alert.reason}")
 
-    # 4. Збереження результатів у CSV
     try:
         output_csv_path.parent.mkdir(parents=True, exist_ok=True)
         with output_csv_path.open("w", newline="", encoding="utf-8") as out_f:
